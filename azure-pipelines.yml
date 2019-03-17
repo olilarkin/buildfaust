@@ -1,0 +1,22 @@
+jobs:
+- job: BUILD_LLVM
+
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  steps:
+  - checkout: none
+
+  - powershell: |
+      .\vcpkg.exe install llvm:x64-windows-static
+
+  - powershell: |
+      git clone --recursive https://github.com/grame-cncm/faust.git
+      
+  - powershell:: |
+      mkdir FAUST_BUILD
+      mkdir FAUST_INSTALL
+      cd FAUST_BUILD
+      .\cmake.exe -C iplug-backends.cmake -C iplug-targets-mac.cmake -DINCLUDE_STATIC=on -DINCLUDE_DYNAMIC=on -DINCLUDE_OSC=off -DINCLUDE_HTTP=off -DUNIVERSAL=off ../faust/build
+      .\cmake.exe -D CMAKE_INSTALL_PREFIX=FAUST_INSTALL ../faust/build
+      .\cmake.exe --build . --config Release -- -j 6
