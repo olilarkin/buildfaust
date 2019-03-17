@@ -13,7 +13,7 @@ jobs:
   - powershell: |
       git clone --recursive https://github.com/grame-cncm/faust.git
       
-  - powershell:: |
+  - powershell: |
       mkdir FAUST_BUILD
       mkdir FAUST_INSTALL
       cd FAUST_BUILD
