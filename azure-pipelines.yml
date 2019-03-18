@@ -8,7 +8,6 @@ jobs:
   - checkout: none
 
   - powershell: |
-#      .\vcpkg.exe install llvm:x64-windows-static
       git clone --config core.autocrlf=false --branch llvmorg-7.0.1 https://github.com/llvm/llvm-project.git 
       mkdir LLVM_BUILD
       cd LLVM_BUILD 
