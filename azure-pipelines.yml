@@ -8,15 +8,21 @@ jobs:
   - checkout: none
 
   - powershell: |
-      .\vcpkg.exe install llvm:x64-windows-static
-
-  - powershell: |
-      git clone --recursive https://github.com/grame-cncm/faust.git
+#      .\vcpkg.exe install llvm:x64-windows-static
+      git clone --config core.autocrlf=false --branch llvmorg-7.0.1 https://github.com/llvm/llvm-project.git 
+      mkdir LLVM_BUILD
+      cd LLVM_BUILD 
+      ./cmake.exe ..\llvm-project\llvm -G "Visual Studio 15 2017 Win64" -DLLVM_USE_CRT_DEBUG=MTd -DLLVM_USE_CRT_RELEASE=MT -DLLVM_BUILD_TESTS=Off -Thost=x64
+      ./cmake.exe --build . --target ALL_BUILD --config Release
+      tree
       
-  - powershell: |
-      mkdir FAUST_BUILD
-      mkdir FAUST_INSTALL
-      cd FAUST_BUILD
-      .\cmake.exe -C iplug-backends.cmake -C iplug-targets-mac.cmake -DINCLUDE_STATIC=on -DINCLUDE_DYNAMIC=on -DINCLUDE_OSC=off -DINCLUDE_HTTP=off -DUNIVERSAL=off ../faust/build
-      .\cmake.exe -D CMAKE_INSTALL_PREFIX=FAUST_INSTALL ../faust/build
-      .\cmake.exe --build . --config Release -- -j 6
+#   - powershell: |
+#       git clone --recursive https://github.com/grame-cncm/faust.git
+      
+#   - powershell: |
+#       mkdir FAUST_BUILD
+#       mkdir FAUST_INSTALL
+#       cd FAUST_BUILD
+#       .\cmake.exe -C iplug-backends.cmake -C iplug-targets-mac.cmake -DINCLUDE_STATIC=on -DINCLUDE_DYNAMIC=on -DINCLUDE_OSC=off -DINCLUDE_HTTP=off -DUNIVERSAL=off ../faust/build
+#       .\cmake.exe -D CMAKE_INSTALL_PREFIX=FAUST_INSTALL ../faust/build
+#       .\cmake.exe --build . --config Release -- -j 6
