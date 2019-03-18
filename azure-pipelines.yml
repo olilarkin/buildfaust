@@ -11,8 +11,8 @@ jobs:
       git clone --config core.autocrlf=false --branch llvmorg-7.0.1 https://github.com/llvm/llvm-project.git 
       mkdir LLVM_BUILD
       cd LLVM_BUILD 
-      ./cmake.exe ..\llvm-project\llvm -G "Visual Studio 15 2017 Win64" -DLLVM_USE_CRT_DEBUG=MTd -DLLVM_USE_CRT_RELEASE=MT -DLLVM_BUILD_TESTS=Off -Thost=x64
-      ./cmake.exe --build . --target ALL_BUILD --config Release
+      cmake ..\llvm-project\llvm -G "Visual Studio 15 2017 Win64" -DLLVM_USE_CRT_DEBUG=MTd -DLLVM_USE_CRT_RELEASE=MT -DLLVM_BUILD_TESTS=Off -Thost=x64
+      cmake --build . --target ALL_BUILD --config Release
       tree
       
 #   - powershell: |
