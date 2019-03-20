@@ -15,20 +15,20 @@ jobs:
       cd LLVM_BUILD 
       cmake ..\llvm-project\llvm -G "Visual Studio 15 2017 Win64" -DLLVM_BUILD_TOOLS=Off -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_USE_CRT_DEBUG=MTd -DLLVM_USE_CRT_RELEASE=MT -DLLVM_BUILD_TESTS=Off -Thost=x64
       cmake --build . --target ALL_BUILD --config Release
-      cmake --build . --target INSTALL -DCMAKE_INSTALL_PREFIX=$env:Build.ArtifactStagingDirectory
+      cmake --build . --target INSTALL -DCMAKE_INSTALL_PREFIX=$env:Build.BinariesDirectory
       tree
+
+  - powershell: |
+      git clone --recursive https://github.com/grame-cncm/faust.git
+      mkdir FAUST_BUILD
+      mkdir FAUST_INSTALL
+      cd FAUST_BUILD
+      cmake -C ..\iplug-backends.cmake -C ..\iplug-targets-mac.cmake -DINCLUDE_STATIC=on -DINCLUDE_DYNAMIC=on -DINCLUDE_OSC=off -DINCLUDE_HTTP=off -DUNIVERSAL=off ..\faust\build
+      cmake -D CMAKE_INSTALL_PREFIX=FAUST_INSTALL $env:Build.StagingDirectory
+      cmake --build . --config Release -- -j 6
+      cmake --build . --target INSTALL
 
   - task: PublishPipelineArtifact@0
     inputs:
       artifactName: 'LLVM'
     
-#   - powershell: |
-#       git clone --recursive https://github.com/grame-cncm/faust.git
-      
-#   - powershell: |
-#       mkdir FAUST_BUILD
-#       mkdir FAUST_INSTALL
-#       cd FAUST_BUILD
-#       .\cmake.exe -C iplug-backends.cmake -C iplug-targets-mac.cmake -DINCLUDE_STATIC=on -DINCLUDE_DYNAMIC=on -DINCLUDE_OSC=off -DINCLUDE_HTTP=off -DUNIVERSAL=off ../faust/build
-#       .\cmake.exe -D CMAKE_INSTALL_PREFIX=FAUST_INSTALL ../faust/build
-#       .\cmake.exe --build . --config Release -- -j 6
