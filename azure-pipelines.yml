@@ -1,5 +1,6 @@
 jobs:
 - job: BUILD_LLVM
+  timeoutInMinutes: 0
 
   pool:
     vmImage: 'vs2017-win2016'
@@ -10,9 +11,11 @@ jobs:
   - powershell: |
       git clone --config core.autocrlf=false --branch llvmorg-7.0.1 https://github.com/llvm/llvm-project.git 
       mkdir LLVM_BUILD
+      mkdir LLVM_INSTALL
       cd LLVM_BUILD 
       cmake ..\llvm-project\llvm -G "Visual Studio 15 2017 Win64" -DLLVM_BUILD_TOOLS=Off -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_USE_CRT_DEBUG=MTd -DLLVM_USE_CRT_RELEASE=MT -DLLVM_BUILD_TESTS=Off -Thost=x64
       cmake --build . --target ALL_BUILD --config Release
+      cmake --build . --target INSTALL -DCMAKE_INSTALL_PREFIX=..\LLVM_BUILD
       tree
       
 #   - powershell: |
