@@ -15,9 +15,13 @@ jobs:
       cd LLVM_BUILD 
       cmake ..\llvm-project\llvm -G "Visual Studio 15 2017 Win64" -DLLVM_BUILD_TOOLS=Off -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_USE_CRT_DEBUG=MTd -DLLVM_USE_CRT_RELEASE=MT -DLLVM_BUILD_TESTS=Off -Thost=x64
       cmake --build . --target ALL_BUILD --config Release
-      cmake --build . --target INSTALL -DCMAKE_INSTALL_PREFIX=..\LLVM_BUILD
+      cmake --build . --target INSTALL -DCMAKE_INSTALL_PREFIX=$env:Build.ArtifactStagingDirectory
       tree
-      
+
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'LLVM'
+    
 #   - powershell: |
 #       git clone --recursive https://github.com/grame-cncm/faust.git
       
